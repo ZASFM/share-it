@@ -1,9 +1,9 @@
 const { request, gql } = require('graphql-request');
 
-const graphqlAPI=process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
+const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
 
 export const getPosts = async () => {
-   const query = gql`
+  const query = gql`
    query MyQuery {
       postsConnection {
         edges {
@@ -32,14 +32,14 @@ export const getPosts = async () => {
       }
     }    
    `;
- 
-   const result = await request(graphqlAPI, query);
- 
-   return result.postsConnection.edges;
- };
 
- export const getRecentPosts=async()=>{
-  const query=gql`
+  const result = await request(graphqlAPI, query);
+
+  return result.postsConnection.edges;
+};
+
+export const getRecentPosts = async () => {
+  const query = gql`
     query GetPostDetails{
       posts(orderBy:createdAt_ASC, last:3){
         title
@@ -51,12 +51,12 @@ export const getPosts = async () => {
       }
     } 
   `;
-  const result=await request(graphqlAPI,query);
+  const result = await request(graphqlAPI, query);
   return result.posts;
 }
 
-export const getSimilarPosts=async(categories,slug)=>{
-  const query=gql`
+export const getSimilarPosts = async (categories, slug) => {
+  const query = gql`
     query GetPostDetails(
       $slug:String!,
       $categories:[String!]
@@ -77,6 +77,19 @@ export const getSimilarPosts=async(categories,slug)=>{
       }
     }
   `;
-  const result=await request(graphqlAPI,query,{slug,categories});
+  const result = await request(graphqlAPI, query, { slug, categories });
   return result.posts;
+}
+
+export const getCategories = async () => {
+  const query = gql`
+      query GetCategories{
+        catgories{
+          name
+          slug
+        }
+      }
+   `;
+   const result=await request(graphqlAPI,query);
+   return result.catgories;
 }
